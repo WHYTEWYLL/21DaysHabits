@@ -10,7 +10,7 @@ contract Escrow {
     address opposing;
     uint public initialDeposit;
     uint initTime;
-    uint timeChecker;
+    uint public timeChecker;
     uint rangeTime = 21 days;
 
     enum Winner {P1, P2}
@@ -31,13 +31,13 @@ contract Escrow {
     
     function inicialice() external{
       require(msg.sender == arbiter || msg.sender == inFavor || msg.sender == opposing ,"Not a member.");
-      require(address(this).balance == initialDeposit, "Deposit not enought.");
+      require(address(this).balance == initialDeposit, "Deposit not enough.");
 
       initTime = block.timestamp;
       timeChecker = block.timestamp;
-      dai.transferFrom(msg.sender, address(this), initialDeposit);
-      dai.approve(address(pool), initialDeposit);
-      pool.deposit(address(dai), initialDeposit, address(this), 0);
+      //dai.transferFrom(msg.sender, address(this), initialDeposit);
+      //dai.approve(address(pool), initialDeposit);
+      //pool.deposit(address(dai), initialDeposit, address(this), 0);
     }
 
 

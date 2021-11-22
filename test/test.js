@@ -5,11 +5,11 @@ const { ethers } = require("hardhat");
 describe("Escrow", function () {
     let escrow;
 
-    before(async () => {
-            [depositor, anFavor, opositor, tester] = await ethers.provider.listAccounts();
-            const Escrow = await ethers.getContractFactory("Escrow");
-            escrow = await Escrow.deploy(anFavor, opositor, "10");
-            await escrow.deployed();
+    beforeEach(async () => {
+        [depositor, anFavor, opositor, tester] = await ethers.provider.listAccounts();
+        const Escrow = await ethers.getContractFactory("Escrow");
+        escrow = await Escrow.deploy(anFavor, opositor, ethers.utils.parseEther("10"));
+        await escrow.deployed();
         
     });
 
@@ -20,7 +20,7 @@ describe("Escrow", function () {
 
     it("Inicial amunt should be 10 ", async function () {
         const balance = await escrow.initialDeposit();
-        assert.equal(balance.toString(), "10");
+        assert.equal(balance.toString(), ethers.utils.parseEther("10"));
     });
 
     it("Inicial amunt should be 10 ", async function () {
@@ -34,15 +34,14 @@ describe("Escrow", function () {
         assert.equal( ethers.utils.formatEther(balance.toString()), "1.0");
     });
 
-
-    it("initTime no enought", async function () {
+    it("Initial amount no enought", async function () {
         let ex;
         try{
             await escrow.inicialice();
         }catch(_ex){
             ex = _ex;
         }
-        assert( ex, "Deposit not enought.");
+        assert( ex, "Deposit not enough.");
     });
 
     it("initTime not a member", async function () {
@@ -52,7 +51,26 @@ describe("Escrow", function () {
         }catch(_ex){
             ex = _ex;
         }
+        console.log(ex);
         assert( ex, "Not a member.");
+    });
+
+    it("timeChecker", async function () {
+        const [owner] = await ethers.getSigners();
+        const transactionHash = await owner.sendTransaction({
+            to: escrow.address,
+            value: ethers.utils.parseEther("10.0"), // Sends exactly 10.0 ether
+          });
+        console.log(await ethers.provider.getBalance(escrow.address));
+        console.log(await escrow.initialDeposit());
+
+        await escrow.inicialice();
+        
+
+        
+        
+            
+        
     });
 
 
