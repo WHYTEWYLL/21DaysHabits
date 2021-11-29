@@ -31,7 +31,7 @@ contract Escrow is VRFConsumerBase {
     enum Winner {None, P1, P2}
     
     IWETHGateway gateway;
-    ILendingPool pool = ILendingPool(0x7d2768dE32b0b80b7a3454c06BdAc94A69DDc7A9);
+    ILendingPool pool;
     IERC20 aWETH;
     
     address internal constant UNISWAP_ROUTER_ADDRESS = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D ;
@@ -123,20 +123,25 @@ contract Escrow is VRFConsumerBase {
 
   function getLinkWithArbiterFee() private{
 
-    uniswapRouter = IUniswapV2Router02(UNISWAP_ROUTER_ADDRESS);
+
+    pool = ILendingPool(0x398eC7346DcD622eDc5ae82352F02bE94C62d119);
 
     uint balanceaWETH = aWETH.balanceOf(address(this));
     uint balanceforLink = balanceaWETH - initialDeposit;
 
+    gateway.withdrawETH(balanceforLink, address(this));
+    
+    console.log(address(this).balance);
+    
+    //pool.withdraw(address(aWETH), balanceforLink, address(this)); // Trying withdraw aWETH to WETH , not working Test1.js
+    
+    uniswapRouter = IUniswapV2Router02(UNISWAP_ROUTER_ADDRESS);
     address[] memory path = new address[](2);
     path[0] = uniswapRouter.WETH();
     path[1] = address(0x514910771AF9Ca656af840dff83E8264EcF986CA);
     uint deadline = block.timestamp + 15; 
-    
-    console.log(address(aWETH));
-    pool.withdraw(address(aWETH), balanceforLink, address(this)); // Trying withdraw aWETH to WETH , not working Test1.js
-    console.log(address(path[0]));
-    //uniswapRouter.swapExactTokensForTokens(balanceforLink, fee, path, address(this), deadline);
+
+    uniswapRouter.swapETHForExactTokens{value: 10}(fee, path, address(this), deadline);
 
   }
    function approve() external {
