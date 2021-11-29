@@ -4,6 +4,7 @@ pragma solidity ^0.7.5;
 import "./interfaces/IERC20.sol";
 import "./interfaces/IWETHGateway.sol";
 import "./interfaces/IUniswapV2Router02.sol";
+import "./interfaces/ILendingPool.sol";
 import "hardhat/console.sol";
 
 import "@chainlink/contracts/src/v0.7/VRFConsumerBase.sol";
@@ -30,10 +31,13 @@ contract Escrow is VRFConsumerBase {
     enum Winner {None, P1, P2}
     
     IWETHGateway gateway;
+    ILendingPool pool = ILendingPool(0x7d2768dE32b0b80b7a3454c06BdAc94A69DDc7A9);
     IERC20 aWETH;
     
     address internal constant UNISWAP_ROUTER_ADDRESS = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D ;
+    
 
+    
     IUniswapV2Router02 public uniswapRouter;
 
     Winner[] public checks = new Winner[](21);
@@ -128,10 +132,11 @@ contract Escrow is VRFConsumerBase {
     path[0] = uniswapRouter.WETH();
     path[1] = address(0x514910771AF9Ca656af840dff83E8264EcF986CA);
     uint deadline = block.timestamp + 15; 
-    //uint[] memory saldo = uniswapRouter.getAmountsIn(fee, path);
-    //console.log(saldo);
-
-    uniswapRouter.swapETHForExactTokens{ value: balanceforLink }(fee, path, address(this), deadline);
+    
+    console.log(address(aWETH));
+    pool.withdraw(address(aWETH), balanceforLink, address(this)); // Trying withdraw aWETH to WETH , not working Test1.js
+    console.log(address(path[0]));
+    //uniswapRouter.swapExactTokensForTokens(balanceforLink, fee, path, address(this), deadline);
 
   }
    function approve() external {
@@ -150,7 +155,7 @@ contract Escrow is VRFConsumerBase {
         withdrawLogic(opposingScore, inFavorScore, initialDeposit);
         gateway.withdrawETH( type(uint).max, arbiter);
     } else if (opposingScore == inFavorScore) {
-      //getLinkWithArbiterFee();
+      getLinkWithArbiterFee();
       bytes32 la =  getRandomNumber();
     }else{
         uint amountinvalid = balance / 2;
