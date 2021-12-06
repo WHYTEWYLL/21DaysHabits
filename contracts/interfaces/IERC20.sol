@@ -48,6 +48,7 @@ interface IERC20 {
      *
      * Emits an {Approval} event.
      */
+     
     function approve(address spender, uint256 amount) external returns (bool);
 
     /**
