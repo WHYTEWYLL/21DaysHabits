@@ -1,12 +1,15 @@
-# AAVE DAI Escrow
+# 21 days habit
 
-This is an AAVE DAI Escrow Dapp built with [Hardhat](https://hardhat.org/).
+If you want the 21-day habit formation guide to work, you have to recognize that forming a new habit is no easy undertaking. It won’t get formed on its own. And for that reason, you have to decide why and how important is that habit to you.
+For that reason, we bring you 21 days habit, the tool to make it easier this journey of creating a habit. Motivating others and yourself to commit, by putting money on the line.
+
+Hope you enjoy, and archive your goals!
 
 ## Project Layout
 
 There are three top-level folders:
 
-1. `/app` - contains the front-end application
+1. `/app` - contains the front-end application (On build)
 2. `/contracts` - contains the solidity contract
 3. `/tests` - contains tests for the solidity contract
 
@@ -25,7 +28,7 @@ You can use hardhat commands to test and compile the contracts, among other thin
 
 To learn more about these commands run `npx hardhat help`.
 
-## Front-End
+## Front-End (On Build)
 
 To run the front-end application:
 
@@ -33,18 +36,6 @@ To run the front-end application:
 2. Move into the `app` folder and run `parcel index.html`
 
 You can learn more about Parcel [here](https://parceljs.org/).
-
-### Using the Dapp
-
-To use the Dapp, first install [Metamask](metamask.io) to your browser of choice.
-
-Once you have metamask installed, you should see a connection notice at the top of the Dapp. The Dapp is currently setup to work **only on Kovan**. You can switch to Kovan by clicking on the metamask browser extension.
-
-Once you have switched to Kovan, you will need some Kovan ether to perform any transactions. At the time of writing [this kovan faucet](https://faucet.kovan.network/) works when you sign in with Github.
-
-When you have your Kovan Ether, the next step is to get some Kovan DAI. After all, this is a **DAI Escrow**! One way to do this would be to borrow some from [AAVE](https://testnet.aave.com/dashboard). If you deposit some Kovan ether you can borrow DAI. Then you can use this DAI to create and fund the Escrow contract!
-
-Fill in the **New Contract** fields and then click **Approve DAI & Deploy**. This will have you approve the Escrow to spend your DAI, and then deploy the contract once that transaction has been completed (this may take a moment).
 
 ## Tests
 
