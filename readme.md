@@ -39,7 +39,7 @@ You can learn more about Parcel [here](https://parceljs.org/).
 
 ## Tests
 
-The tests are setup to point at already deployed AAVE contracts. We'll need to fork mainnet to do this in our test blockchain.
+The tests are setup to point at already deployed to the need contracts. We'll need to fork mainnet to do this in our test blockchain.
 
 ### Forking Mainnet
 
