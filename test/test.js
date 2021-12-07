@@ -1,13 +1,19 @@
 const { BigNumber } = require("@ethersproject/bignumber");
-const { assert, expect } = require("chai");
 const { ethers } = require("hardhat");
 const vrfCoordinatorABI = require("@chainlink/contracts/abi/v0.6/VRFCoordinator.json");
+const { assert, expect } = require("chai");
 
 
+let WETH = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
+
+let UNISWAP_ROUTER_ADDRESS = "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D";
+
+let AavePool = "0x7d2768dE32b0b80b7a3454c06BdAc94A69DDc7A9";
 const IWETHGateway = "0xDcD33426BA191383f1c9B431A342498fdac73488";
 let aWETH  = "0x030bA81f1c18d280636F32af80b9AAd02Cf0854e";
-let WETH = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
+
 let escrow;
+
 const LINK_ADDR = "0x514910771AF9Ca656af840dff83E8264EcF986CA";
 const VRF_ADDR = "0xf0d54349aDdcf704F77AE15b96510dEA15cb7952";
 const keyHash = "0xAA77729D3466CA35AE8D28B3BBAC7CC36A5031EFDC430821C02BC31A238AF445";
@@ -26,6 +32,8 @@ describe("Escrow- Stage 1 - constructor and inicialice", function () {
         const Essentials  = { 
             gateway : IWETHGateway,
             aWETH,
+            pool : AavePool,
+            uniswapRouter : UNISWAP_ROUTER_ADDRESS,
             inFavor:anFavor,
             opposing : opositor,
             amount : ethers.utils.parseEther("10"),
@@ -104,6 +112,8 @@ describe("Escrow - Stage 2 - Checker & Score", function () {
         const Essentials  = { 
             gateway : IWETHGateway,
             aWETH,
+            uniswapRouter : UNISWAP_ROUTER_ADDRESS,
+            pool : AavePool,
             inFavor:anFavor,
             opposing : opositor,
             amount : ethers.utils.parseEther("10"),
@@ -163,6 +173,8 @@ describe("Escrow - Stage 3 - Checker & Score", function () {
         const Essentials  = { 
             gateway : IWETHGateway,
             aWETH,
+            uniswapRouter : UNISWAP_ROUTER_ADDRESS,
+            pool : AavePool,
             inFavor:anFavor,
             opposing : opositor,
             amount : ethers.utils.parseEther("10"),
@@ -171,7 +183,7 @@ describe("Escrow - Stage 3 - Checker & Score", function () {
             keyHash : keyHash, 
             fee : fee
           }
-
+        
         const Escrow = await ethers.getContractFactory("Escrow");
         escrow = await Escrow.deploy( Essentials);
 
@@ -249,6 +261,8 @@ describe("Escrow - Stage 4 - Chainlink & Score", function () {
         const Essentials  = { 
             gateway : IWETHGateway,
             aWETH,
+            uniswapRouter : UNISWAP_ROUTER_ADDRESS,
+            pool : AavePool,
             inFavor:anFavor,
             opposing : opositor,
             amount : ethers.utils.parseEther("10"),
@@ -329,6 +343,8 @@ describe("Escrow - Stage 5 - checks.length == opposingScore + inFavorScore ", fu
         const Essentials  = { 
             gateway : IWETHGateway,
             aWETH,
+            uniswapRouter : UNISWAP_ROUTER_ADDRESS,
+            pool : AavePool,
             inFavor:anFavor,
             opposing : opositor,
             amount : ethers.utils.parseEther("10"),

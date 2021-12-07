@@ -1,6 +1,8 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.7.5;
 pragma abicoder v2;
+
+
 import "./interfaces/IERC20.sol";
 import "./interfaces/IWETHGateway.sol";
 import "./interfaces/IUniswapV2Router02.sol";
@@ -13,7 +15,7 @@ import "@chainlink/contracts/src/v0.7/VRFConsumerBase.sol";
 
 contract Escrow is VRFConsumerBase {
 
-  address internal constant UNISWAP_ROUTER_ADDRESS = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D ;
+  //address internal constant UNISWAP_ROUTER_ADDRESS = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D ;
   address arbiter;
   address inFavor;
   address opposing;
@@ -45,23 +47,33 @@ contract Escrow is VRFConsumerBase {
   struct Essentials { 
     IWETHGateway gateway;
     IERC20 aWETH;
+    ILendingPool pool;
+    
+    IUniswapV2Router02 uniswapRouter;
+
     address inFavor;
     address opposing;
     uint amount;
+
+
     address vrf;
     address link;
     bytes32 keyHash;
     uint fee;
   }
-  constructor( Essentials memory inicial
-              ) VRFConsumerBase( inicial.vrf,inicial.link ) {
+
+  constructor( Essentials memory inicial) VRFConsumerBase( inicial.vrf,inicial.link ) {
+
     aWETH = inicial.aWETH;
     gateway  = inicial.gateway;
+    pool = inicial.pool;
+    uniswapRouter = inicial.uniswapRouter;
 
     arbiter = msg.sender;
     inFavor = inicial.inFavor;
     opposing = inicial.opposing;
-    initialDeposit = inicial.amount;      
+    initialDeposit = inicial.amount;
+
     keyHash = inicial.keyHash;
     fee =  inicial.fee;
     link = inicial.link;
@@ -142,9 +154,6 @@ contract Escrow is VRFConsumerBase {
    **/
   function getLinkWithArbiterFee() private {
 
-    pool = ILendingPool(0x7d2768dE32b0b80b7a3454c06BdAc94A69DDc7A9);
-
-    uniswapRouter = IUniswapV2Router02(UNISWAP_ROUTER_ADDRESS);
     address[] memory path = new address[](2);
     uint balanceaWETH = aWETH.balanceOf(address(this));
     uint deadline = block.timestamp + 15; 
