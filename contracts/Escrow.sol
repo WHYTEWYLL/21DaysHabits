@@ -1,6 +1,6 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.7.5;
-
+pragma abicoder v2;
 import "./interfaces/IERC20.sol";
 import "./interfaces/IWETHGateway.sol";
 import "./interfaces/IUniswapV2Router02.sol";
@@ -42,28 +42,29 @@ contract Escrow is VRFConsumerBase {
 
   Winner[] public checks;
 
-    
-  constructor(IWETHGateway _gateway, 
-              IERC20 _aWETH,
-              address _inFavor,
-              address _opposing,
-              uint _amount, 
-              address _vrfCoordinator,
-              address _link,
-              bytes32 _keyHash,
-              uint _fee) VRFConsumerBase( _vrfCoordinator,_link ) {
-    
-
-    aWETH = _aWETH;
-    gateway  = _gateway;
+  struct Essentials { 
+    IWETHGateway gateway;
+    IERC20 aWETH;
+    address inFavor;
+    address opposing;
+    uint amount;
+    address vrf;
+    address link;
+    bytes32 keyHash;
+    uint fee;
+  }
+  constructor( Essentials memory inicial
+              ) VRFConsumerBase( inicial.vrf,inicial.link ) {
+    aWETH = inicial.aWETH;
+    gateway  = inicial.gateway;
 
     arbiter = msg.sender;
-    inFavor = _inFavor;
-    opposing = _opposing;
-    initialDeposit = _amount;      
-    keyHash = _keyHash;
-    fee =  _fee;
-    link = _link;
+    inFavor = inicial.inFavor;
+    opposing = inicial.opposing;
+    initialDeposit = inicial.amount;      
+    keyHash = inicial.keyHash;
+    fee =  inicial.fee;
+    link = inicial.link;
   }
     
   /**

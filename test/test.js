@@ -13,13 +13,30 @@ const VRF_ADDR = "0xf0d54349aDdcf704F77AE15b96510dEA15cb7952";
 const keyHash = "0xAA77729D3466CA35AE8D28B3BBAC7CC36A5031EFDC430821C02BC31A238AF445";
 const fee = ethers.utils.parseEther("2") ;
 
+
+
+
+
 describe("Escrow- Stage 1 - constructor and inicialice", function () {
 
 
     beforeEach(async () => {
         [depositor, anFavor, opositor, tester] = await ethers.provider.listAccounts();
+
+        const Essentials  = { 
+            gateway : IWETHGateway,
+            aWETH,
+            inFavor:anFavor,
+            opposing : opositor,
+            amount : ethers.utils.parseEther("10"),
+            vrf : VRF_ADDR,
+            link :LINK_ADDR,
+            keyHash : keyHash, 
+            fee : fee
+          }
+
         const Escrow = await ethers.getContractFactory("Escrow");
-        escrow = await Escrow.deploy( IWETHGateway, aWETH , anFavor, opositor, ethers.utils.parseEther("10"), VRF_ADDR, LINK_ADDR, keyHash, fee);
+        escrow = await Escrow.deploy( Essentials);
         await escrow.deployed();
         aWETHcon = await ethers.getContractAt("IERC20", aWETH);
         
@@ -83,8 +100,22 @@ describe("Escrow - Stage 2 - Checker & Score", function () {
 
     beforeEach(async () => {
         [depositor, anFavor, opositor, tester] = await ethers.provider.listAccounts();
+
+        const Essentials  = { 
+            gateway : IWETHGateway,
+            aWETH,
+            inFavor:anFavor,
+            opposing : opositor,
+            amount : ethers.utils.parseEther("10"),
+            vrf : VRF_ADDR,
+            link :LINK_ADDR,
+            keyHash : keyHash, 
+            fee : fee
+          }
+
         const Escrow = await ethers.getContractFactory("Escrow");
-        escrow = await Escrow.deploy( IWETHGateway, aWETH , anFavor, opositor, ethers.utils.parseEther("10"), VRF_ADDR, LINK_ADDR, keyHash, fee);
+        escrow = await Escrow.deploy( Essentials);
+        
         await escrow.deployed();
         aWETHcon = await ethers.getContractAt("IERC20", aWETH);
 
@@ -128,8 +159,22 @@ describe("Escrow - Stage 3 - Checker & Score", function () {
 
     beforeEach(async () => {
         [depositor, anFavor, opositor, tester] = await ethers.provider.listAccounts();
+
+        const Essentials  = { 
+            gateway : IWETHGateway,
+            aWETH,
+            inFavor:anFavor,
+            opposing : opositor,
+            amount : ethers.utils.parseEther("10"),
+            vrf : VRF_ADDR,
+            link :LINK_ADDR,
+            keyHash : keyHash, 
+            fee : fee
+          }
+
         const Escrow = await ethers.getContractFactory("Escrow");
-        escrow = await Escrow.deploy( IWETHGateway, aWETH , anFavor, opositor, ethers.utils.parseEther("10"), VRF_ADDR, LINK_ADDR, keyHash, fee);
+        escrow = await Escrow.deploy( Essentials);
+
         await escrow.deployed();
         aWETHcon = await ethers.getContractAt("IERC20", aWETH);
         const [owner] = await ethers.getSigners();
@@ -196,14 +241,29 @@ describe("Escrow - Stage 4 - Chainlink & Score", function () {
 
 
     beforeEach(async () => {
+
         const [owner] = await ethers.getSigners();
 
         [depositor, anFavor, opositor] = await ethers.provider.listAccounts();
-        const Escrow = await ethers.getContractFactory("Escrow");
 
-        escrow = await Escrow.deploy( IWETHGateway, aWETH , anFavor, opositor, ethers.utils.parseEther("10"), VRF_ADDR, LINK_ADDR, keyHash, fee);
+        const Essentials  = { 
+            gateway : IWETHGateway,
+            aWETH,
+            inFavor:anFavor,
+            opposing : opositor,
+            amount : ethers.utils.parseEther("10"),
+            vrf : VRF_ADDR,
+            link :LINK_ADDR,
+            keyHash : keyHash, 
+            fee : fee
+          }
+
+        const Escrow = await ethers.getContractFactory("Escrow");
+        escrow = await Escrow.deploy( Essentials);
+
         await escrow.deployed();
         aWETHcon = await ethers.getContractAt("IERC20", aWETH);
+
         const transactionHash = await owner.sendTransaction({
             to: escrow.address,
             value: ethers.utils.parseEther("10.0"), 
@@ -265,11 +325,24 @@ describe("Escrow - Stage 5 - checks.length == opposingScore + inFavorScore ", fu
         const [owner] = await ethers.getSigners();
 
         [depositor, anFavor, opositor] = await ethers.provider.listAccounts();
-        const Escrow = await ethers.getContractFactory("Escrow");
+        
+        const Essentials  = { 
+            gateway : IWETHGateway,
+            aWETH,
+            inFavor:anFavor,
+            opposing : opositor,
+            amount : ethers.utils.parseEther("10"),
+            vrf : VRF_ADDR,
+            link :LINK_ADDR,
+            keyHash : keyHash, 
+            fee : fee
+          }
 
-        escrow = await Escrow.deploy( IWETHGateway, aWETH , anFavor, opositor, ethers.utils.parseEther("10"), VRF_ADDR, LINK_ADDR, keyHash, fee);
+        const Escrow = await ethers.getContractFactory("Escrow");
+        escrow = await Escrow.deploy( Essentials);
         await escrow.deployed();
         aWETHcon = await ethers.getContractAt("IERC20", aWETH);
+        
         const transactionHash = await owner.sendTransaction({
             to: escrow.address,
             value: ethers.utils.parseEther("10.0"), 
