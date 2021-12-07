@@ -505,15 +505,8 @@ describe("Escrow - Stage 5 - checks.length == opposingScore + inFavorScore ", fu
         anFavorBalanceA = (await WETHcon.balanceOf(anFavor));
         opositorBalanceA = (await WETHcon.balanceOf(opositor));
  
-        //console.log("Pre", anFavorBalance.toString(), opositorBalance.toString());
-        //console.log("Despues", anFavorBalanceA.toString(), opositorBalanceA.toString());
 
-        //console.log(opositorBalance < opositorBalanceA);
-        //console.log(anFavorBalance <  anFavorBalanceA);
-        //console.log(opositorBalance == opositorBalanceA);
-        //console.log(anFavorBalance ==  anFavorBalanceA);
-
-        //expect( opositorBalanceA > opositorBalance  || anFavorBalanceA > anFavorBalance).to.be.true;
+        expect( BigInt(opositorBalance) < BigInt(opositorBalanceA) || BigInt(anFavorBalance) <  BigInt(anFavorBalanceA)).to.be.true;
     });
 
 });
