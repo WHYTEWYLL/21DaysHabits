@@ -15,7 +15,6 @@ import "@chainlink/contracts/src/v0.7/VRFConsumerBase.sol";
 
 contract Escrow is VRFConsumerBase {
 
-  //address internal constant UNISWAP_ROUTER_ADDRESS = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D ;
   address arbiter;
   address inFavor;
   address opposing;
@@ -61,6 +60,12 @@ contract Escrow is VRFConsumerBase {
     bytes32 keyHash;
     uint fee;
   }
+
+  event Approved();
+  event Inicialiced(address indexed initializer);
+  event Checker();
+  event Scored(uint8 P1, uint8 P2);
+  event Depositor(address indexed depositor, uint amount);
 
   constructor( Essentials memory inicial) VRFConsumerBase( inicial.vrf,inicial.link ) {
 
@@ -240,9 +245,5 @@ contract Escrow is VRFConsumerBase {
       randomResult = ramdoness % 2 ;
   }  
   
-  event Approved();
-  event Inicialiced(address indexed initializer);
-  event Checker();
-  event Scored(uint8 P1, uint8 P2);
-  event Depositor(address indexed depositor, uint amount);
+
 }
